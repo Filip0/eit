@@ -6,7 +6,7 @@ class Grid(object):
     def __init__(self, image, upper=False):
         super(Grid, self).__init__()
         if upper:
-            self.array = np.zeros([image.size[1], image.size[0], 4], dtype=np.uint8)
+            self.array = np.zeros([image.size[1], image.size[0], 3], dtype=np.uint8)
         else:
             self.load_image(image)
 
@@ -17,4 +17,4 @@ class Grid(object):
         self.array[x][y] = value
 
     def load_image(self, image):
-        self.array = np.array(image.getdata(), np.uint8).reshape(image.size[1], image.size[0], 4)
+        self.array = np.array(image.getdata(), np.uint8).reshape(image.size[1], image.size[0], 3)

@@ -24,7 +24,7 @@ class Pixelateit(object):
 
 
 def main():
-    px = Pixelateit("/home/filip/face.png")
+    px = Pixelateit("/Users/mrton/Desktop/smile.jpg")
     px.loop()
 
 if __name__ == "__main__":
