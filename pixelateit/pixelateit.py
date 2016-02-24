@@ -2,8 +2,9 @@ from grid import Grid
 from organism import Organism
 from PIL import Image
 from scipy.misc import toimage
+import os
 
-EPOCHS = 200
+EPOCHS = 400
 
 class Pixelateit(object):
     """docstring for Pixelateit"""
@@ -16,7 +17,7 @@ class Pixelateit(object):
         self.lower_grid = Grid(image)
         self.upper_grid = Grid(image)
         self.lower_grid.load_image(image)
-        self.organisms = Organism.generate(10000, 701, 1024, self.lower_grid, self.upper_grid)
+        self.organisms = Organism.generate(500, image.size[1], image.size[0], self.lower_grid, self.upper_grid)
 
     def loop(self):
         toimage(self.upper_grid.array).save('first.jpg')
@@ -30,7 +31,7 @@ class Pixelateit(object):
 
 
 def main():
-    px = Pixelateit("/home/filip/face.jpg")
+    px = Pixelateit(os.path.join(os.path.dirname(__file__), 'images/wave.jpg'))
     px.loop()
 
 if __name__ == "__main__":
