@@ -6,7 +6,7 @@ class Organism(object):
     def __init__(self, x, y, lower_grid, upper_grid):
         super(Organism, self).__init__()
         self.color = (0,0,0,0)
-        self.mass = 0
+        self.mass = 1#random.randint(1, 5)
         self.x = x
         self.y = y
         self.lower_grid = lower_grid
@@ -31,20 +31,20 @@ class Organism(object):
         temp = t[random.randint(0,8)]
         if 0 <= self.x + temp[0] < len(self.lower_grid.array):
             self.x = self.x + temp[0]
-        if 0 <= self.y + temp[1] < len(self.lower_grid.array):
+        if 0 <= self.y + temp[1] < len(self.lower_grid.array[0]):
             self.y = self.y + temp[1]
         self.eat()
 
     def eat(self):
         lower_grid_color = self.lower_grid.get_pixel(self.x, self.y)
-        eaten_color = tuple(x*0.3 for x in lower_grid_color)
+        eaten_color = tuple(x*random.random() for x in lower_grid_color)
         self.color = helper.add_tuples(self.color, eaten_color)
         self.lower_grid.set_pixel(self.x, self.y, helper.subtract_tuples(lower_grid_color, eaten_color))
         upper_grid_color = self.upper_grid.get_pixel(self.x, self.y)
-        remaining_color = tuple(x*0.7 for x in self.color)
-        self.upper_grid.set_pixel(self.x, self.y, self.color)
+        remaining_color = tuple(x*0.9 for x in self.color)
+        self.upper_grid.set_pixel(self.x, self.y, self.color, self.mass)
         self.color = remaining_color
-        print("Eat grid {} {}".format(self.x, self.y))
+        #print("Eat grid {} {}".format(self.x, self.y))
 
     @classmethod
     def generate(cls, num, x, y, lower_grid, upper_grid):
