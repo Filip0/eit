@@ -17,7 +17,7 @@ class Organism(object):
 
     def get_color(self):
         return self.color
-
+#test
     def set_color(r,b,g,a):
         self.color = (r,b,g,a)
 
