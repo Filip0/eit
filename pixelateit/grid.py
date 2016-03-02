@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+from helper import add_tuples
 
 class Grid(object):
     """docstring for Grid"""
@@ -17,6 +18,10 @@ class Grid(object):
             for j in range(y-radius, y+radius):
                 if (0 <= i < self.max_x) and (0 <= j < self.max_y):
                     self.array[i][j] = value
+
+    def add_color(self, x, y, color):
+        self.array[x][y] = np.add(self.array[x][y], color)
+        #self.array[x][y] = add_tuples(self.array[x][y], color)
 
 
     def load_image(self, image):

@@ -1,10 +1,12 @@
 from grid import Grid
+from dict_grid import DictGrid
 from organism import Organism
 from PIL import Image
 from scipy.misc import toimage
 import os
 
-EPOCHS = 400
+EPOCHS = 1000
+
 
 class Pixelateit(object):
     """docstring for Pixelateit"""
@@ -15,23 +17,23 @@ class Pixelateit(object):
         image.paste(im)
 
         self.lower_grid = Grid(image)
+        #self.upper_grid = DictGrid(image)
         self.upper_grid = Grid(image)
         self.lower_grid.load_image(image)
-        self.organisms = Organism.generate(500, image.size[1], image.size[0], self.lower_grid, self.upper_grid)
+        self.organisms = Organism.generate(1000, image.size[1], image.size[0], self.lower_grid, self.upper_grid)
 
     def loop(self):
         toimage(self.upper_grid.array).save('first.jpg')
         for x in range(0, EPOCHS):
             for org in self.organisms:
                 org.move()
+                org.eat()
             print(x)
-        toimage(self.upper_grid.array).save('outfile.jpg')
-
-
+        toimage(self.upper_grid.array).save('outfile.png')
 
 
 def main():
-    px = Pixelateit(os.path.join(os.path.dirname(__file__), 'images/wave.jpg'))
+    px = Pixelateit(os.path.join(os.path.dirname(__file__), 'images/scream.jpg'))
     px.loop()
 
 if __name__ == "__main__":
