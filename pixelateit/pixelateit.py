@@ -5,7 +5,8 @@ from PIL import Image
 from scipy.misc import toimage
 import os
 
-EPOCHS = 1000
+EPOCHS = 300
+ORGAMISMS = 10000
 
 
 class Pixelateit(object):
@@ -20,7 +21,7 @@ class Pixelateit(object):
         #self.upper_grid = DictGrid(image)
         self.upper_grid = Grid(image)
         self.lower_grid.load_image(image)
-        self.organisms = Organism.generate(1000, image.size[1], image.size[0], self.lower_grid, self.upper_grid)
+        self.organisms = Organism.generate(ORGAMISMS, image.size[1], image.size[0], self.lower_grid, self.upper_grid)
 
     def loop(self):
         toimage(self.upper_grid.array).save('first.jpg')
@@ -30,6 +31,7 @@ class Pixelateit(object):
                 org.eat()
             print(x)
         toimage(self.upper_grid.array).save('outfile.png')
+        toimage(self.lower_grid.array).save('outfile2.png')
 
 
 def main():
