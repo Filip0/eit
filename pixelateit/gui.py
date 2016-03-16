@@ -1,6 +1,7 @@
 import sys, os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from PIL.ImageQt import ImageQt
 
 class PictureBox(QWidget):
 
@@ -17,13 +18,26 @@ class PictureBox(QWidget):
         self.hbox.addWidget(lbl)
 
 
+        self.move(50, 50)
+        self.setWindowTitle('Pixelateit')
+        self.show()
+
+    def openPIL_Image(self, image):
+        for i in range(self.hbox.count()): self.hbox.itemAt(i).widget().close()
+        qti = ImageQt(image)
+        pixmap = QPixmap().fromImage(qti)
+        lbl = QLabel(self)
+        lbl.setPixmap(pixmap)
+        self.hbox.addWidget(lbl)
         self.move(300, 200)
         self.setWindowTitle('Pixelateit')
         self.show()
 
 class Window(QWidget):
-    def __init__(self, parent = None):
+    def __init__(self, pixelateit, parent = None):
+        self.app = QApplication(sys.argv)
         super(Window, self).__init__(parent)
+        self.px = pixelateit
         self.setWindowTitle("Pixelateit")
         self.resize(200, 500)
         self.move(1200, 400)
@@ -35,6 +49,9 @@ class Window(QWidget):
         self.iterations = 200
         self.organisms = 200
         self.home()
+
+    def run(self):
+        sys.exit(self.app.exec_())
 
     # WIDGETS WITHIN WINDOW
     def home(self):
@@ -105,18 +122,28 @@ class Window(QWidget):
 
     #CONTROL METHODS FOR WIDGETS
     def start(self):
+        if not self.px.image_loaded:
+            msg = QMessageBox()
+            msg.setText("No image loaded")
+            msg.exec_()
+            return
         print("starting...")
         self.completed = 0
         self.running = True
-        while self.completed < 100 and self.running:
-            self.completed += 0.001
+        while self.completed < self.iterations and self.running:
+            self.px.update()
+            self.completed += 1
+            if self.completed % 10 == 0:
+                self.picBox.openPicture(self.px.save_image("out/out{}.png".format(self.completed)))
+
             QApplication.processEvents()
             self.progress.setValue(self.completed)
+
 
     def resume(self):
         print("starting...")
         self.running = True
-        while self.completed < 100 and self.running:
+        while self.completed < self.iterations and self.running:
             self.completed += 0.001
             QApplication.processEvents()
             self.progress.setValue(self.completed)
@@ -138,15 +165,10 @@ class Window(QWidget):
 
     def file_open(self):
         name = QFileDialog.getOpenFileName(self, 'Open File')
+        self.px.load_image(name)
         self.picBox.openPicture(name)
 
     def file_open_without_dialog(self):
         filename = "grass.png"
         self.picBox.openPicture(filename)
 
-def run():
-    app = QApplication(sys.argv)
-    GUI = Window()
-    sys.exit(app.exec_())
-
-run()

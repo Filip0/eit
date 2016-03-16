@@ -31,6 +31,7 @@ class Organism(object):
         class_ = random.choice(movers)
         self.mover = class_(self)
         #self.mover = ZagMover(self)
+        #self.mover = RandomMover(self)
         self.eater = SuperSimpleEater(self)
 
     def set_pos(self, x, y):

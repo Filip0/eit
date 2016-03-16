@@ -3,6 +3,7 @@ from dict_grid import DictGrid
 from organism import Organism
 from PIL import Image
 from scipy.misc import toimage
+from gui import Window
 import os
 
 EPOCHS = 1000
@@ -11,17 +12,24 @@ ORGAMISMS = 1000
 
 class Pixelateit(object):
     """docstring for Pixelateit"""
-    def __init__(self, image_file):
+    def __init__(self):
         super(Pixelateit, self).__init__()
+        self.image_loaded = False
+        self.lower_grid = None
+        self.upper_grid = None
+        self.gui = Window(self)
+
+
+    def load_image(self, image_file):
         im = Image.open(image_file)
         image = Image.new('RGBA', im.size)
         image.paste(im)
 
         self.lower_grid = Grid(image)
-        #self.upper_grid = DictGrid(image)
         self.upper_grid = Grid(image)
         self.lower_grid.load_image(image)
-        self.organisms = Organism.generate(ORGAMISMS, image.size[1], image.size[0], self.lower_grid, self.upper_grid)
+        self.organisms = Organism.generate(self.gui.organisms, image.size[1], image.size[0], self.lower_grid, self.upper_grid)
+        self.image_loaded = True
 
     def loop(self):
         toimage(self.upper_grid.array).save('first.jpg')
@@ -35,10 +43,20 @@ class Pixelateit(object):
         toimage(self.upper_grid.array).save('outfile.png')
         toimage(self.lower_grid.array).save('outfile2.png')
 
+    def update(self):
+        for org in self.organisms:
+            org.move()
+            org.eat()
+
+    def save_image(self, name):
+        path = os.path.join(os.path.dirname(__file__), name)
+        toimage(self.upper_grid.array).save(name)
+        return path
+
 
 def main():
-    px = Pixelateit(os.path.join(os.path.dirname(__file__), 'images/scream.jpg'))
-    px.loop()
+    px = Pixelateit()
+    px.gui.run()
 
 if __name__ == "__main__":
     main()
