@@ -5,8 +5,8 @@ from PIL import Image
 from scipy.misc import toimage
 import os
 
-EPOCHS = 300
-ORGAMISMS = 10000
+EPOCHS = 1000
+ORGAMISMS = 1000
 
 
 class Pixelateit(object):
@@ -30,6 +30,8 @@ class Pixelateit(object):
                 org.move()
                 org.eat()
             print(x)
+            #if x % 10 == 0:
+            #    toimage(self.upper_grid.array).save('out/outfile{}.png'.format(x))
         toimage(self.upper_grid.array).save('outfile.png')
         toimage(self.lower_grid.array).save('outfile2.png')
 

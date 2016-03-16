@@ -1,6 +1,6 @@
 import random
 import helper
-from movers.simple_mover import SimpleMover
+from movers.simple_mover import *
 from eaters.simple_eater import SimpleEater
 from eaters.super_simple_eater import SuperSimpleEater
 
@@ -27,7 +27,10 @@ class Organism(object):
         self.upper_grid = upper_grid
         self.speed = 0  # calculated
         self.direction = 0
-        self.mover = SimpleMover(self)
+        movers = [SimpleMover, ZagMover, ZigMover, RandomMover]
+        class_ = random.choice(movers)
+        self.mover = class_(self)
+        #self.mover = ZagMover(self)
         self.eater = SuperSimpleEater(self)
 
     def set_pos(self, x, y):
