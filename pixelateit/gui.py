@@ -2,13 +2,15 @@ import sys, os
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PIL.ImageQt import ImageQt
+import time
 
 class PictureBox(QWidget):
 
-    def __init__(self):
+    def __init__(self, pos):
         super(PictureBox, self).__init__()
         self.hbox = QHBoxLayout(self)
         self.setLayout(self.hbox)
+        self.move(pos[0], pos[1])
 
     def openPicture(self, picture):
         for i in range(self.hbox.count()): self.hbox.itemAt(i).widget().close()
@@ -18,7 +20,6 @@ class PictureBox(QWidget):
         self.hbox.addWidget(lbl)
 
 
-        self.move(50, 50)
         self.setWindowTitle('Pixelateit')
         self.show()
 
@@ -34,14 +35,15 @@ class PictureBox(QWidget):
         self.show()
 
 class Window(QWidget):
-    def __init__(self, pixelateit, parent = None):
+    def __init__(self, pixelateit, parent=None):
         self.app = QApplication(sys.argv)
         super(Window, self).__init__(parent)
         self.px = pixelateit
         self.setWindowTitle("Pixelateit")
         self.resize(200, 500)
-        self.move(1200, 400)
-        self.picBox = PictureBox()
+        self.move(800, 100)
+        self.original_picBox = PictureBox((30, 30))
+        self.picBox = PictureBox((500, 30))
 
         self.running = False
         self.completed = 0
@@ -111,6 +113,21 @@ class Window(QWidget):
         self.layout.addWidget(self.sl2)
         self.sl2.valueChanged.connect(self.organismschange)
 
+        self.mover_widget_label = QLabel("Movers")
+        self.layout.addWidget(self.mover_widget_label)
+        self.mover_widget = QListWidget()
+        self.mover_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.mover_widget.addItems(["SimpleMover", "ZagMover", "CircleMover", "RandomMover"])
+        self.layout.addWidget(self.mover_widget)
+
+        self.eater_widget_label = QLabel("Eater")
+        self.layout.addWidget(self.eater_widget_label)
+        self.eater_widget = QListWidget()
+        self.eater_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.eater_widget.addItems(["SimpleEater", "SimpleEater2", "SuperSimpleEater", "CalcEater", "AvgEater"])
+        self.layout.addWidget(self.eater_widget)
+
+
         # PROGRESSBAR
         self.progress = QProgressBar(self)
         #self.progress.setGeometry(0,0,50, self.height() - 140)
@@ -137,16 +154,21 @@ class Window(QWidget):
                 self.picBox.openPicture(self.px.save_image("out/out{}.png".format(self.completed)))
 
             QApplication.processEvents()
-            self.progress.setValue(self.completed)
+            self.progress.setValue(self.completed/self.iterations*100)
+        self.px.save_image("out/{}.png".format(time.time()))
 
 
     def resume(self):
         print("starting...")
         self.running = True
         while self.completed < self.iterations and self.running:
-            self.completed += 0.001
+            self.px.update()
+            self.completed += 1
+            if self.completed % 10 == 0:
+                self.picBox.openPicture(self.px.save_image("out/out{}.png".format(self.completed)))
+
             QApplication.processEvents()
-            self.progress.setValue(self.completed)
+            self.progress.setValue(self.completed/self.iterations*100)
 
     def stop(self):
         print("stopping")
@@ -165,7 +187,10 @@ class Window(QWidget):
 
     def file_open(self):
         name = QFileDialog.getOpenFileName(self, 'Open File')
-        self.px.load_image(name)
+        movers = [x.text() for x in self.mover_widget.selectedItems()]
+        eaters = [x.text() for x in self.eater_widget.selectedItems()]
+        self.px.load_image(name, movers, eaters)
+        self.original_picBox.openPicture(name)
         self.picBox.openPicture(name)
 
     def file_open_without_dialog(self):

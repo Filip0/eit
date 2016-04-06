@@ -1,8 +1,9 @@
 import random
 import helper
 from movers.simple_mover import *
-from eaters.simple_eater import SimpleEater
+from eaters.simple_eater import SimpleEater, CalcEater, AvgEater, SimpleEater2
 from eaters.super_simple_eater import SuperSimpleEater
+import sys
 
 COLORS = [
         [110,281,40, 255],
@@ -17,22 +18,21 @@ COLORS = [
 
 class Organism(object):
     """docstring for Organism"""
-    def __init__(self, x, y, lower_grid, upper_grid):
+    def __init__(self, x, y, px):
         super(Organism, self).__init__()
-        self.color = lower_grid.get_pixel(x, y)#random.choice(COLORS)
-        self.mass = random.randint(1, 2)
+        self.color = px.lower_grid.get_pixel(x, y)#random.choice(COLORS)
+        self.mass = 1#random.randint(1, 2)
         self.x = x
         self.y = y
-        self.lower_grid = lower_grid
-        self.upper_grid = upper_grid
+        self.lower_grid = px.lower_grid
+        self.upper_grid = px.upper_grid
         self.speed = 0  # calculated
         self.direction = 0
-        movers = [SimpleMover, ZagMover, ZigMover, RandomMover]
-        class_ = random.choice(movers)
-        self.mover = class_(self)
-        #self.mover = ZagMover(self)
-        #self.mover = RandomMover(self)
-        self.eater = SuperSimpleEater(self)
+        class_ = random.choice(px.movers)
+        self.mover = getattr(sys.modules[__name__], class_)(self)
+        class_ = random.choice(px.eaters)
+        self.eater = getattr(sys.modules[__name__], class_)(self)
+
 
     def set_pos(self, x, y):
         self.x = x
@@ -58,11 +58,12 @@ class Organism(object):
         self.eater.eat()
 
     @classmethod
-    def generate(cls, num, x, y, lower_grid, upper_grid):
+    def generate(cls, num, x, y, px):
         orgs = []
         for z in range(1, num):
-            orgs.append(Organism(random.randint(0, x-1), random.randint(0,y-1), lower_grid, upper_grid))
+            orgs.append(Organism(random.randint(0, x-1), random.randint(0,y-1), px))
         return orgs
+
 
 
 

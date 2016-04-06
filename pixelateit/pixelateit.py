@@ -20,15 +20,18 @@ class Pixelateit(object):
         self.gui = Window(self)
 
 
-    def load_image(self, image_file):
+    def load_image(self, image_file, movers, eaters):
+        print(image_file)
         im = Image.open(image_file)
         image = Image.new('RGBA', im.size)
         image.paste(im)
+        self.eaters = eaters
+        self.movers = movers
 
         self.lower_grid = Grid(image)
         self.upper_grid = Grid(image)
         self.lower_grid.load_image(image)
-        self.organisms = Organism.generate(self.gui.organisms, image.size[1], image.size[0], self.lower_grid, self.upper_grid)
+        self.organisms = Organism.generate(self.gui.organisms, image.size[1], image.size[0], self)
         self.image_loaded = True
 
     def loop(self):
@@ -50,6 +53,7 @@ class Pixelateit(object):
 
     def save_image(self, name):
         path = os.path.join(os.path.dirname(__file__), name)
+        print(name)
         toimage(self.upper_grid.array).save(name)
         return path
 
