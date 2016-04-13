@@ -72,43 +72,6 @@ class Window(QWidget):
         self.btn4.move(self.width() - 100,self.height() - 200)
         self.layout.addWidget(self.btn4)
 
-
-        self.strokeLabel = QLabel("Stroke thickness")
-        self.layout.addWidget(self.strokeLabel)
-        self.sp = QSpinBox()
-        self.layout.addWidget(self.sp)
-
-
-
-
-
-        # SLIDERS
-        self.sliderLabel = QLabel("Iterations: " + str(self.iterations))
-        #self.sliderLabel.move(self.width() - 100, self.height() - 200)
-        self.layout.addWidget(self.sliderLabel)
-        self.sl = QSlider(Qt.Horizontal)
-        self.sl.setMinimum(0)
-        self.sl.setMaximum(2000)
-        self.sl.setValue(self.iterations)
-        self.sl.setTickPosition(QSlider.TicksBelow)
-        self.sl.setTickInterval(100)
-        #self.sl.move(self.width()-100, self.height() - 180)
-        self.layout.addWidget(self.sl)
-        self.sl.valueChanged.connect(self.iterationschange)
-
-        self.sliderLabel2 = QLabel("Organisms: " + str(self.organisms))
-        #self.sliderLabel.move(self.width() - 100,self.height() - 180)
-        self.layout.addWidget(self.sliderLabel2)
-        self.sl2 = QSlider(Qt.Horizontal)
-        self.sl2.setMinimum(0)
-        self.sl2.setMaximum(1000)
-        self.sl2.setValue(self.organisms)
-        self.sl2.setTickPosition(QSlider.TicksBelow)
-        self.sl2.setTickInterval(100)
-        #self.sl2.move(self.width()-100, self.height() - 160)
-        self.layout.addWidget(self.sl2)
-        self.sl2.valueChanged.connect(self.organismschange)
-
         self.mover_widget_label = QLabel("Movers")
         self.layout.addWidget(self.mover_widget_label)
         self.mover_widget = QListWidget()
@@ -123,7 +86,37 @@ class Window(QWidget):
         self.eater_widget.addItems(["SimpleEater", "SimpleEater2", "SuperSimpleEater", "CalcEater", "AvgEater"])
         self.layout.addWidget(self.eater_widget)
 
+        self.strokeLabel = QLabel("Stroke thickness")
+        self.layout.addWidget(self.strokeLabel)
+        self.sp = QSpinBox()
+        self.layout.addWidget(self.sp)
 
+        self.sliderLabel2 = QLabel("Organisms: " + str(self.organisms))
+        #self.sliderLabel.move(self.width() - 100,self.height() - 180)
+        self.layout.addWidget(self.sliderLabel2)
+        self.sl2 = QSlider(Qt.Horizontal)
+        self.sl2.setMinimum(0)
+        self.sl2.setMaximum(1000)
+        self.sl2.setValue(self.organisms)
+        self.sl2.setTickPosition(QSlider.TicksBelow)
+        self.sl2.setTickInterval(100)
+        #self.sl2.move(self.width()-100, self.height() - 160)
+        self.layout.addWidget(self.sl2)
+        self.sl2.valueChanged.connect(self.organismschange)
+
+        # SLIDERS
+        self.sliderLabel = QLabel("Iterations: " + str(self.iterations))
+        #self.sliderLabel.move(self.width() - 100, self.height() - 200)
+        self.layout.addWidget(self.sliderLabel)
+        self.sl = QSlider(Qt.Horizontal)
+        self.sl.setMinimum(0)
+        self.sl.setMaximum(2000)
+        self.sl.setValue(self.iterations)
+        self.sl.setTickPosition(QSlider.TicksBelow)
+        self.sl.setTickInterval(100)
+        #self.sl.move(self.width()-100, self.height() - 180)
+        self.layout.addWidget(self.sl)
+        self.sl.valueChanged.connect(self.iterationschange)
 
 
         self.btn = QPushButton("Start", self)
