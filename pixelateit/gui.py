@@ -12,7 +12,7 @@ class PictureBox(QWidget):
         self.setLayout(self.hbox)
         self.move(pos[0], pos[1])
 
-    def openPicture(self, picture):
+    def openPicture(self, picture, window_text="Output image"):
         for i in range(self.hbox.count()): self.hbox.itemAt(i).widget().close()
         pixmap = QPixmap(picture)
         lbl = QLabel(self)
@@ -20,7 +20,7 @@ class PictureBox(QWidget):
         self.hbox.addWidget(lbl)
 
 
-        self.setWindowTitle('Pixelateit')
+        self.setWindowTitle(window_text)
         self.show()
 
     def openPIL_Image(self, image):
@@ -206,7 +206,7 @@ class Window(QWidget):
     def file_open(self):
         name = QFileDialog.getOpenFileName(self, 'Open File')
         self.px.load_image(name)
-        self.original_picBox.openPicture(name)
+        self.original_picBox.openPicture(name, "Input image")
         self.picBox.openPicture(name)
 
     def file_open_without_dialog(self):
