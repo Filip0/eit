@@ -33,9 +33,10 @@ class Pixelateit(object):
         #self.organisms = Organism.generate(self.gui.organisms, image.size[1], image.size[0], self)
         self.image_loaded = True
 
-    def start(self, movers, eaters):
+    def start(self, movers, eaters, stroke):
         self.eaters = eaters
         self.movers = movers
+        self.stroke = stroke
         self.organisms = Organism.generate(self.gui.organisms, self.lower_grid.max_x, self.lower_grid.max_y, self)
 
     def loop(self):

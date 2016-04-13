@@ -21,7 +21,7 @@ class Organism(object):
     def __init__(self, x, y, px):
         super(Organism, self).__init__()
         self.color = px.lower_grid.get_pixel(x, y)#random.choice(COLORS)
-        self.mass = 1#random.randint(1, 2)
+        self.mass = px.stroke #random.randint(1, 10)
         self.x = x
         self.y = y
         self.lower_grid = px.lower_grid

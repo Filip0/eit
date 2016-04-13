@@ -14,7 +14,7 @@ class PictureBox(QWidget):
 
     def openPicture(self, picture, window_text="Output image"):
         for i in range(self.hbox.count()): self.hbox.itemAt(i).widget().close()
-        pixmap = QPixmap(picture)
+        pixmap = QPixmap(picture).scaled(400,400, Qt.KeepAspectRatio)
         lbl = QLabel(self)
         lbl.setPixmap(pixmap)
         self.hbox.addWidget(lbl)
@@ -73,6 +73,10 @@ class Window(QWidget):
         self.layout.addWidget(self.btn4)
 
 
+        self.strokeLabel = QLabel("Stroke thickness")
+        self.layout.addWidget(self.strokeLabel)
+        self.sp = QSpinBox()
+        self.layout.addWidget(self.sp)
 
 
 
@@ -156,7 +160,7 @@ class Window(QWidget):
             return
         movers = [x.text() for x in self.mover_widget.selectedItems()]
         eaters = [x.text() for x in self.eater_widget.selectedItems()]
-        self.px.start(movers, eaters)
+        self.px.start(movers, eaters, self.sp.value())
         print("starting...")
         self.completed = 0
         self.running = True
