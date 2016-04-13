@@ -61,30 +61,22 @@ class Window(QWidget):
         self.layout = QVBoxLayout()
 
         #BUTTONS
-        self.btn = QPushButton("Start", self)
-        self.btn.clicked.connect(self.start)
-        self.btn.move(self.width() - 100,self.height() - 280)
-        self.layout.addWidget(self.btn)
 
-        self.btn1 = QPushButton("Resume", self)
-        self.btn1.clicked.connect(self.resume)
-        self.btn1.move(self.width() - 100,self.height() - 260)
-        self.layout.addWidget(self.btn1)
-
-        self.btn2 = QPushButton("Stop", self)
-        self.btn2.clicked.connect(self.stop)
-        self.btn2.move(self.width() - 100, 240  )
-        self.layout.addWidget(self.btn2)
-
-        self.btn3 = QPushButton("Load", self)
+        self.btn3 = QPushButton("Load Image", self)
         self.btn3.clicked.connect(self.file_open)
         self.btn3.move(self.width() - 100,self.height() - 220)
         self.layout.addWidget(self.btn3)
 
-        self.btn4 = QPushButton("Save", self)
+        self.btn4 = QPushButton("Save Image", self)
         self.btn4.clicked.connect(self.file_open_without_dialog)
         self.btn4.move(self.width() - 100,self.height() - 200)
         self.layout.addWidget(self.btn4)
+
+
+
+
+
+
 
         # SLIDERS
         self.sliderLabel = QLabel("Iterations: " + str(self.iterations))
@@ -128,6 +120,23 @@ class Window(QWidget):
         self.layout.addWidget(self.eater_widget)
 
 
+
+
+        self.btn = QPushButton("Start", self)
+        self.btn.clicked.connect(self.start)
+        self.btn.move(self.width() - 100,self.height() - 280)
+        self.layout.addWidget(self.btn)
+
+        self.btn1 = QPushButton("Resume", self)
+        self.btn1.clicked.connect(self.resume)
+        self.btn1.move(self.width() - 100,self.height() - 260)
+        self.layout.addWidget(self.btn1)
+
+        self.btn2 = QPushButton("Stop", self)
+        self.btn2.clicked.connect(self.stop)
+        self.btn2.move(self.width() - 100, 240  )
+        self.layout.addWidget(self.btn2)
+
         # PROGRESSBAR
         self.progress = QProgressBar(self)
         #self.progress.setGeometry(0,0,50, self.height() - 140)
@@ -137,6 +146,7 @@ class Window(QWidget):
         self.setLayout(self.layout)
         self.show()
 
+
     #CONTROL METHODS FOR WIDGETS
     def start(self):
         if not self.px.image_loaded:
@@ -144,6 +154,9 @@ class Window(QWidget):
             msg.setText("No image loaded")
             msg.exec_()
             return
+        movers = [x.text() for x in self.mover_widget.selectedItems()]
+        eaters = [x.text() for x in self.eater_widget.selectedItems()]
+        self.px.start(movers, eaters)
         print("starting...")
         self.completed = 0
         self.running = True
@@ -155,6 +168,8 @@ class Window(QWidget):
 
             QApplication.processEvents()
             self.progress.setValue(self.completed/self.iterations*100)
+        self.completed = 0
+        self.running = False
         self.px.save_image("out/{}.png".format(time.time()))
 
 
@@ -169,6 +184,9 @@ class Window(QWidget):
 
             QApplication.processEvents()
             self.progress.setValue(self.completed/self.iterations*100)
+        if self.running:
+            self.completed = 0
+            self.running = False
 
     def stop(self):
         print("stopping")
@@ -187,9 +205,7 @@ class Window(QWidget):
 
     def file_open(self):
         name = QFileDialog.getOpenFileName(self, 'Open File')
-        movers = [x.text() for x in self.mover_widget.selectedItems()]
-        eaters = [x.text() for x in self.eater_widget.selectedItems()]
-        self.px.load_image(name, movers, eaters)
+        self.px.load_image(name)
         self.original_picBox.openPicture(name)
         self.picBox.openPicture(name)
 
