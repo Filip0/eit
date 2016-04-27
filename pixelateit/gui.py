@@ -14,7 +14,7 @@ class PictureBox(QWidget):
 
     def openPicture(self, picture, window_text="Output image"):
         for i in range(self.hbox.count()): self.hbox.itemAt(i).widget().close()
-        pixmap = QPixmap(picture).scaled(400,400, Qt.KeepAspectRatio)
+        pixmap = QPixmap(picture).scaled(575,575, Qt.KeepAspectRatio)
         lbl = QLabel(self)
         lbl.setPixmap(pixmap)
         self.hbox.addWidget(lbl)
@@ -83,7 +83,7 @@ class Window(QWidget):
         self.layout.addWidget(self.eater_widget_label)
         self.eater_widget = QListWidget()
         self.eater_widget.setSelectionMode(QAbstractItemView.ExtendedSelection)
-        self.eater_widget.addItems(["SimpleEater", "SimpleEater2", "SuperSimpleEater", "CalcEater", "AvgEater"])
+        self.eater_widget.addItems([ "SuperSimpleEater", "SimpleEater", "ObscureEater", "AvgEater"])
         self.layout.addWidget(self.eater_widget)
 
         self.strokeLabel = QLabel("Stroke thickness")

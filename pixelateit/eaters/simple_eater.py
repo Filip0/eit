@@ -2,10 +2,10 @@ import helper
 import numpy as np
 import random
 
-class SimpleEater(object):
+class ObscureEater(object):
     """docstring for SimpleEater"""
     def __init__(self, organism):
-        super(SimpleEater, self).__init__()
+        super(ObscureEater, self).__init__()
         self.organism = organism
 
     def eat(self):
@@ -27,10 +27,10 @@ class SimpleEater(object):
             o.upper_grid.add_color(o.x, o.y, placing_color)
         o.color = np.subtract(o.color, remove_color)
 
-class SimpleEater2(object):
-    """docstring for SimpleEater2"""
+class SimpleEater(object):
+    """docstring for SimpleEater"""
     def __init__(self, organism):
-        super(SimpleEater2, self).__init__()
+        super(SimpleEater, self).__init__()
         self.organism = organism
 
     def eat(self):
@@ -38,7 +38,7 @@ class SimpleEater2(object):
         lower_grid_color = o.lower_grid.get_pixel(o.x, o.y)
         eaten_color = lower_grid_color*0.05
         color = o.color*0.95
-        #o.color = np.add(color, eaten_color)
+        o.color = np.add(color, eaten_color)
 
         o.place_color()
 

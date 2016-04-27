@@ -1,7 +1,7 @@
 import random
 import helper
 from movers.simple_mover import *
-from eaters.simple_eater import SimpleEater, CalcEater, AvgEater, SimpleEater2
+from eaters.simple_eater import ObscureEater, CalcEater, AvgEater, SimpleEater
 from eaters.super_simple_eater import SuperSimpleEater
 import sys
 
